@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Артефактология — Коллекция</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #f5f0e8;
+    --surface:  #fffdf8;
+    --border:   #ddd5c0;
+    --gold:     #8a6520;
+    --gold-lt:  #b8892a;
+    --text:     #2a2010;
+    --muted:    #7a6a50;
+    --tag:      #a08040;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(180,150,80,0.12) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8a84b' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 70px 28px 100px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+
+  .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--gold-lt);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 50px);
+    letter-spacing: 4px;
+    color: var(--text);
+    margin-top: 12px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.25s forwards;
+  }
+
+  h1 span { color: var(--gold); }
+
+  .rule {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin: 20px 0;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+  }
+
+  .rule-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-lt));
+  }
+  .rule-line:last-child {
+    background: linear-gradient(90deg, var(--gold-lt), transparent);
+  }
+  .rule-diamond {
+    width: 6px; height: 6px;
+    background: var(--gold-lt);
+    transform: rotate(45deg);
+  }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 17px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.5s forwards;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(100,70,10,0.12);
+    border-color: var(--gold-lt);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold-lt), transparent);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 36px;
+    line-height: 1;
+    margin-bottom: 18px;
+    transition: transform 0.3s ease;
+  }
+  .card:hover .card-icon { transform: scale(1.12); }
+
+  .card-tag {
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--tag);
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--muted);
+    font-style: italic;
+    flex: 1;
+  }
+
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.5;
+    transition: opacity 0.3s ease, gap 0.3s ease;
+  }
+  .card:hover .card-cta { opacity: 1; gap: 12px; }
+
+  .card:nth-child(1)  { animation-delay: 0.50s; }
+  .card:nth-child(2)  { animation-delay: 0.58s; }
+  .card:nth-child(3)  { animation-delay: 0.66s; }
+  .card:nth-child(4)  { animation-delay: 0.74s; }
+  .card:nth-child(5)  { animation-delay: 0.82s; }
+  .card:nth-child(6)  { animation-delay: 0.90s; }
+  .card:nth-child(7)  { animation-delay: 0.98s; }
+  .card:nth-child(8)  { animation-delay: 1.06s; }
+  .card:nth-child(9)  { animation-delay: 1.14s; }
+  .card:nth-child(10) { animation-delay: 1.22s; }
+  .card:nth-child(11) { animation-delay: 1.30s; }
+  .card:nth-child(12) { animation-delay: 1.38s; }
+  .card:nth-child(13) { animation-delay: 1.46s; }
+
+  footer {
+    text-align: center;
+    margin-top: 64px;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: rgba(122,106,80,0.45);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.6s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="eyebrow">Кинематографическая</div>
+    <h1>Арте<span>факт</span>ология</h1>
+    <div class="rule">
+      <div class="rule-line"></div>
+      <div class="rule-diamond"></div>
+      <div class="rule-line"></div>
+    </div>
+    <p class="subtitle">Наука сквозь призму кино — избранные миры</p>
+  </header>
+
+  <div class="grid">
+
+    <a class="card" href="2012.html">
+      <div class="card-icon">🌋</div>
+      <div class="card-tag">Геология · Катастрофа</div>
+      <div class="card-title">«2012»</div>
+      <div class="card-desc">Когда земная кора срывается с места — что говорит настоящая геология о конце света.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="avatar.html">
+      <div class="card-icon">🌿</div>
+      <div class="card-tag">Экология · Планета</div>
+      <div class="card-title">«Аватар»</div>
+      <div class="card-desc">Пандора как зеркало Земли — биосфера, нейросети природы и уроки сосуществования.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="Lucy.html">
+      <div class="card-icon">🧠</div>
+      <div class="card-tag">Нейронаука · Мозг</div>
+      <div class="card-title"> «Люси»</div>
+      <div class="card-desc">Правда о потенциале мозга — что возможно на самом деле и где заканчивается миф.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="deep_blue_sea__1_.html">
+      <div class="card-icon">🦈</div>
+      <div class="card-tag">Океан · Биология</div>
+      <div class="card-title">«Глубокое синее море»</div>
+      <div class="card-desc">Акулы, давление глубин и загадки океана — наука в самом тёмном месте планеты.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="king.html">
+      <div class="card-icon">🦍</div>
+      <div class="card-tag">Зоология · Эволюция</div>
+      <div class="card-title">«Кинг Конг»</div>
+      <div class="card-desc">Гигантизм в природе, острова-реликты и реальные гиганты животного мира.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="war.html">
+      <div class="card-icon">👾</div>
+      <div class="card-tag">Астробиология · Физика</div>
+      <div class="card-title">«Война миров»</div>
+      <div class="card-desc">Могут ли инопланетяне существовать — и чем их погубило то, что нас спасает.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="godzilla.html">
+      <div class="card-icon">☢️</div>
+      <div class="card-tag">Радиация · Мутации</div>
+      <div class="card-title">«Годзилла»</div>
+      <div class="card-desc">Радиация, мутации и пределы роста — реальная наука за легендарным монстром.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="dino.html">
+      <div class="card-icon">🦕</div>
+      <div class="card-tag">Палеонтология · ДНК</div>
+      <div class="card-title">«Прак юрского периода»</div>
+      <div class="card-desc">ДНК и вопрос: возможно ли воскресить то, чего нет уже 66 миллионов лет.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="mummi.html">
+      <div class="card-icon">📜</div>
+      <div class="card-tag">Египтология · История</div>
+      <div class="card-title">«Мумия»</div>
+      <div class="card-desc">Проклятия, бальзамирование и реальные тайны египетских гробниц.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="nazad.html">
+      <div class="card-icon">⏳</div>
+      <div class="card-tag">Хронофизика · Время</div>
+      <div class="card-title">«Назад в будущее»</div>
+      <div class="card-desc">Машина времени, парадоксы причинности и что физика говорит о путешествиях во времени.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="devil.html">
+      <div class="card-icon">🧬</div>
+      <div class="card-tag">Вирусология · Биохимия</div>
+      <div class="card-title">«Обитель зла»</div>
+      <div class="card-desc">Вирусы-мутагены, зомби-апокалипсис и реальная наука о самых опасных патогенах.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="posle.html">
+      <div class="card-icon">❄️</div>
+      <div class="card-tag">Климатология · Физика</div>
+      <div class="card-title">«Послезавтра»</div>
+      <div class="card-desc">Климатический коллапс, океанские течения и реальные сценарии изменения климата.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+    <a class="card" href="ant.html">
+      <div class="card-icon">🐜</div>
+      <div class="card-tag">Квантовая физика · Размер</div>
+      <div class="card-title">«Человек-муравей»</div>
+      <div class="card-desc">Квантовый мир, уменьшение материи и что происходит на границе субатомного.</div>
+      <div class="card-cta">Открыть →</div>
+    </a>
+
+  </div>
+
+  <footer>Артефактология &nbsp;·&nbsp; Наука сквозь призму кино</footer>
+
+</div>
+</body>
+</html>
